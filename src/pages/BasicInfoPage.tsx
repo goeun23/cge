@@ -55,9 +55,9 @@ export function BasicInfoPage() {
 
     contractSession.save({
       basic: {
-        name: values.name.trim(),
+        name: values.name,
         phone: values.phone.replace(/-/g, ''),
-        email: values.email.trim(),
+        email: values.email,
       },
     });
     navigate('/merchant-info');
