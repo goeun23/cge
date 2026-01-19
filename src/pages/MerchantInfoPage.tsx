@@ -16,8 +16,8 @@ const validate = (values: { storeName: string; businessNumber: string; address: 
 
   if (!values.businessNumber) {
     errors.businessNumber = '사업자등록번호를 입력해주세요.';
-  } else if (!/^\d+$/.test(values.businessNumber)) {
-    errors.businessNumber = '숫자만 입력해주세요.';
+  } else if (!/^\d{10}$/.test(values.businessNumber)) {
+    errors.businessNumber = '올바른 사업자등록번호를 입력해주세요.';
   }
 
   if (!values.address) {
@@ -127,6 +127,7 @@ export function MerchantInfoPage() {
             value={values.businessNumber}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('businessNumber', e.target.value)}
             type="tel"
+            maxLength={10}
           />
           {touched.businessNumber && errors.businessNumber && <ErrorText message={errors.businessNumber} />}
         </div>

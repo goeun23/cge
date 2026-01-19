@@ -5,6 +5,13 @@ import { useForm } from '../hooks/useForm';
 import { contractSession } from '../utils/contractSession';
 import { ErrorText } from '../components/ErrorText';
 
+const formatPhoneNumber = (value: string) => {
+  const numbers = value.replace(/[^\d]/g, '');
+  if (numbers.length <= 3) return numbers;
+  if (numbers.length <= 7) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+  return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+};
+
 const validate = (values: { name: string; phone: string; email: string }) => {
   const errors: Record<string, string> = {};
 
@@ -14,8 +21,8 @@ const validate = (values: { name: string; phone: string; email: string }) => {
 
   if (!values.phone) {
     errors.phone = '휴대폰 번호를 입력해주세요.';
-  } else if (!/^\d+$/.test(values.phone)) {
-    errors.phone = '숫자만 입력해주세요.';
+  } else if (!/^010-\d{4}-\d{4}$/.test(values.phone)) {
+    errors.phone = '올바른 휴대폰 번호를 입력해주세요.';
   }
 
   if (!values.email) {
@@ -38,14 +45,19 @@ export function BasicInfoPage() {
     validate
   );
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhoneNumber(e.target.value);
+    handleChange('phone', formatted);
+  };
+
   const onClickNext = () => {
     if (!isValid) return;
 
     contractSession.save({
       basic: {
-        name: values.name,
-        phone: values.phone,
-        email: values.email,
+        name: values.name.trim(),
+        phone: values.phone.replace(/-/g, ''),
+        email: values.email.trim(),
       },
     });
     navigate('/merchant-info');
@@ -73,8 +85,9 @@ export function BasicInfoPage() {
           <TextFieldLine
             placeholder="휴대폰 번호"
             value={values.phone}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('phone', e.target.value)}
+            onChange={handlePhoneChange}
             type="tel"
+            maxLength={13}
           />
 
           {touched.phone && errors.phone && <ErrorText message={errors.phone} />}

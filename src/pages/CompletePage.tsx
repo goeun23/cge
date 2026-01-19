@@ -1,8 +1,12 @@
 import { Flex, Spacing, Top, FixedBottomCTA } from 'ishopcare-lib';
 import { useNavigate } from 'react-router';
-
+import { contractSession } from '../utils/contractSession';
 export function CompletePage() {
   const navigate = useNavigate();
+  const onClickComplete = () => {
+    contractSession.clear();
+    navigate('/');
+  };
   return (
     <>
       <Top title={<Top.TitleParagraph>신청이 완료됐어요!</Top.TitleParagraph>} />
@@ -15,13 +19,7 @@ export function CompletePage() {
           height={200}
         />
       </Flex>
-      <FixedBottomCTA
-        onClick={() => {
-          navigate('/');
-        }}
-      >
-        완료하기
-      </FixedBottomCTA>
+      <FixedBottomCTA onClick={() => onClickComplete()}>완료하기</FixedBottomCTA>
     </>
   );
 }
