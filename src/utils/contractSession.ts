@@ -1,22 +1,6 @@
-export interface ContractData {
-  basic: {
-    name: string;
-    phone: string;
-    email: string;
-  };
-  merchant: {
-    name: string;
-    businessNumber: string;
-    address: {
-      street: string;
-      city: string;
-      state: string;
-      zipcode: string;
-      details: string;
-    };
-  };
-  businessCategory: string;
-}
+import { Contract } from '../models';
+
+export type ContractData = Contract;
 
 const STORAGE_KEY = 'ishopcare_contract_data';
 
@@ -31,7 +15,7 @@ export const contractSession = {
     }
   },
 
-  load: (): ContractData => {
+  load: (): Partial<ContractData> => {
     try {
       const data = sessionStorage.getItem(STORAGE_KEY);
       return data ? JSON.parse(data) : {};
