@@ -1,6 +1,7 @@
 import { Assets, Flex, NavigationBar, Spacing, TextFieldLine, Toast, Top } from 'ishopcare-lib';
 import { FormCTA } from '../components/FormCTA';
 import { useNavigate } from 'react-router';
+import { useEffect } from 'react';
 import { overlay } from 'overlay-kit';
 import { contractSession } from '../utils/contractSession';
 import { useForm } from '../hooks/useForm';
@@ -33,6 +34,12 @@ const validate = (values: { storeName: string; businessNumber: string; address: 
 export function MerchantInfoPage() {
   const navigate = useNavigate();
   const { basic, merchant } = contractSession.load();
+
+  useEffect(() => {
+    if (!basic?.name) {
+      navigate('/');
+    }
+  }, [basic, navigate]);
 
   const { values, errors, touched, handleChange, isValid } = useForm(
     {

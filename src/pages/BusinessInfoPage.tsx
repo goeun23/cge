@@ -11,10 +11,14 @@ export function BusinessInfoPage() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<BusinessCategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const { merchant } = contractSession.load();
+  const { basic, merchant } = contractSession.load();
   useEffect(() => {
+    if (!basic?.name || !merchant?.name) {
+      navigate('/');
+      return;
+    }
     getBusinessCategories().then(setCategories);
-  }, []);
+  }, [basic, merchant, navigate]);
 
   const handleSelect = (value: string) => {
     setSelectedCategory(value === selectedCategory ? null : value);
