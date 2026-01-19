@@ -4,8 +4,9 @@ import { Assets, Checkbox, colors, Flex, ListRow, NavigationBar, Spacing, Toast,
 import { overlay } from 'overlay-kit';
 import { FormCTA } from '../components/FormCTA';
 import { createContract, getBusinessCategories } from '../api';
-import { BusinessCategory, Contract } from '../models';
+import { BusinessCategory } from '../models';
 import { contractSession } from '../utils/contractSession';
+import { isContract } from '../utils/typeGuard';
 
 export function BusinessInfoPage() {
   const navigate = useNavigate();
@@ -32,9 +33,17 @@ export function BusinessInfoPage() {
         businessCategory: selectedCategory!,
       });
 
-      const allData = contractSession.load();
+      const contractData = contractSession.load();
+      // 데이터 무결성 체크
+      if (!isContract(contractData)) {
+        overlay.open(({ isOpen, close }) => {
+          return <Toast isOpen={isOpen} close={close} type="warn" message="필수 정보가 누락되었어요." />;
+        });
+        return;
+      }
+
       try {
-        await createContract(allData as Contract);
+        await createContract(contractData);
         navigate('/complete');
       } catch (e) {
         overlay.open(({ isOpen, close }) => {
