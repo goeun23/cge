@@ -1,4 +1,5 @@
-import { Assets, FixedBottomCTA, Flex, NavigationBar, Spacing, TextFieldLine, Toast, Top } from 'ishopcare-lib';
+import { Assets, Flex, NavigationBar, Spacing, TextFieldLine, Toast, Top } from 'ishopcare-lib';
+import { FormCTA } from '../components/FormCTA';
 import { useNavigate } from 'react-router';
 import { overlay } from 'overlay-kit';
 import { contractSession } from '../utils/contractSession';
@@ -151,16 +152,9 @@ export function MerchantInfoPage() {
           {touched.addressDetail && errors.addressDetail && <ErrorText message={errors.addressDetail} />}
         </div>
       </Flex>
-      <FixedBottomCTA
-        theme={!isValid ? 'dark' : 'primary'}
-        disabled={!isValid}
-        style={!isValid ? 'weak' : 'fill'}
-        onClick={() => {
-          onClickNext();
-        }}
-      >
+      <FormCTA isValid={isValid} onClick={onClickNext}>
         다음
-      </FixedBottomCTA>
+      </FormCTA>
     </>
   );
 }

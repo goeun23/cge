@@ -1,4 +1,5 @@
-import { Assets, Flex, NavigationBar, TextFieldLine, Top, Spacing, FixedBottomCTA } from 'ishopcare-lib';
+import { Assets, Flex, NavigationBar, TextFieldLine, Top, Spacing } from 'ishopcare-lib';
+import { FormCTA } from '../components/FormCTA';
 import { useNavigate } from 'react-router';
 import { useForm } from '../hooks/useForm';
 import { contractSession } from '../utils/contractSession';
@@ -89,14 +90,9 @@ export function BasicInfoPage() {
           {touched.email && errors.email && <ErrorText message={errors.email} />}
         </div>
       </Flex>
-      <FixedBottomCTA
-        theme={!isValid ? 'dark' : 'primary'}
-        disabled={!isValid}
-        style={!isValid ? 'weak' : 'fill'}
-        onClick={onClickNext}
-      >
+      <FormCTA isValid={isValid} onClick={onClickNext}>
         다음
-      </FixedBottomCTA>
+      </FormCTA>
     </>
   );
 }
